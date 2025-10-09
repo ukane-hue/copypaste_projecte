@@ -64,6 +64,7 @@ mysql -u root -p portapapers < database/database.sql
    define('DB_NAME', 'portapapers');
    define('DB_USER', 'el_teu_usuari');
    define('DB_PASS', 'la_teva_contrasenya');
+   ...
    ```
 
 3. Posa tots els fitxers al directori del teu servidor web.
@@ -108,7 +109,7 @@ Assegura't que el servidor web tingui permisos de lectura i escriptura al direct
 ## Estructura del Projecte
 
 ```
-portapapers/
+copypaste/
 ├── index.php                    # Redirecció a /public
 ├── .htaccess                   # Configuració del servidor web
 ├── public/                     # Fitxers públics
@@ -236,7 +237,7 @@ Si necessites executar la neteja manualment:
 
 ```bash
 # Via API
-curl -X POST http://localhost/portapapers/api.php?action=neteja
+curl -X POST http://localhost/api.php?action=neteja
 
 # Via PHP directe
 php -r "require_once 'config.php'; echo netejarPortapapersAntics() . ' registres eliminats';"
@@ -247,7 +248,7 @@ php -r "require_once 'config.php'; echo netejarPortapapersAntics() . ' registres
 Consulta les estadístiques de neteja:
 
 ```bash
-curl http://localhost/portapapers/api.php?action=estadistiques
+curl http://localhost/api.php?action=estadistiques
 ```
 
 ## Mode Debug i Gestió d'Errors
