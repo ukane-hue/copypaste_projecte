@@ -1,6 +1,6 @@
-# Portapapers - Aplicació de Compartició de Text
+# Copy&Paste - Aplicació per copiar i pegar Text/Fitxers entre dispositius remots
 
-Una aplicació web moderna per compartir text entre dispositius remots mitjançant codis hexadecimals únics.
+Una aplicació web PHP per copiar/pegar/compartir text i fitxers entre dispositius remots mitjançant codis hexadecimals únics.
 
 ## Característiques
 
@@ -10,7 +10,7 @@ Una aplicació web moderna per compartir text entre dispositius remots mitjança
 - ✅ **Disseny responsive** per a mòbils i escriptori
 - ✅ **API REST** per a la gestió de portapapers
 - ✅ **Notificacions en temps real** per a l'usuari
-- ✅ **Neteja automàtica** de portapapers antics (més de 2 hores)
+- ✅ **Neteja automàtica** de portapapers antics (més de 2 hores sense ús)
 - ✅ **Variables d'entorn** per a configuració segura
 - ✅ **Indicador de typing** en temps real entre dispositius
 
