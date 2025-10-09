@@ -1,0 +1,11 @@
+# Configuració per la carpeta public
+RewriteEngine On
+
+# Permetre accés directe a fitxers
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Redirigir a index.php per rutes no trobades
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]

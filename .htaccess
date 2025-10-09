@@ -1,0 +1,13 @@
+# Configuració per Portapapers
+RewriteEngine On
+
+# Redirigir l'arrel a /public
+RewriteRule ^$ public/ [L]
+
+# Permetre accés directe a fitxers públics
+RewriteRule ^(css|js|images|public)/ - [L]
+
+# Redirigir totes les altres peticions a /public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]
