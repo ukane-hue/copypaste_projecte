@@ -21,6 +21,21 @@ define('DB_PASS', $_ENV['DB_PASS'] ?? '');
 define('HEX_LENGTH', (int)($_ENV['HEX_LENGTH'] ?? 6));
 define('REFRESH_INTERVAL', (int)($_ENV['REFRESH_INTERVAL'] ?? 2000)); // 2 segons
 
+// Configuració de debug
+define('DEBUG', filter_var($_ENV['DEBUG'] ?? 'true', FILTER_VALIDATE_BOOLEAN));
+
+// Configurar error reporting segons el mode debug
+if (DEBUG) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+    ini_set('log_errors', 1);
+}
+
 class Database {
     private static $instance = null;
     private $connection;
@@ -38,7 +53,12 @@ class Database {
                 ]
             );
         } catch (PDOException $e) {
-            die("Error de connexió: " . $e->getMessage());
+            if (DEBUG) {
+                die("Error de connexió: " . $e->getMessage());
+            } else {
+                error_log("Error de connexió a la base de dades: " . $e->getMessage());
+                redirigirError();
+            }
         }
     }
     
@@ -108,4 +128,65 @@ function obtenirEstadistiquesNeteja() {
         ];
     }
 }
+
+// Funció per redirigir a la pàgina d'error
+function redirigirError() {
+    if (!DEBUG) {
+        header('Location: /error.php');
+        exit;
+    }
+}
+
+// Funció per gestionar errors segons el mode debug
+function gestionarError($error, $redirect = true) {
+    if (DEBUG) {
+        // En mode debug, mostrar l'error
+        throw new Exception($error);
+    } else {
+        // En mode producció, registrar l'error i redirigir
+        error_log("Error: " . $error);
+        if ($redirect) {
+            redirigirError();
+        }
+    }
+}
+
+// Gestor d'errors personalitzat
+function gestorErrorsPersonalitzat($severity, $message, $file, $line) {
+    if (!(error_reporting() & $severity)) {
+        return false;
+    }
+    
+    $error = "Error [$severity]: $message a $file:$line";
+    
+    if (DEBUG) {
+        echo "<div style='color: red; background: #ffe6e6; padding: 10px; margin: 10px; border: 1px solid red;'>";
+        echo "<strong>Error:</strong> $error";
+        echo "</div>";
+    } else {
+        error_log($error);
+        redirigirError();
+    }
+    
+    return true;
+}
+
+// Gestor d'excepcions personalitzat
+function gestorExcepcionsPersonalitzat($exception) {
+    $error = "Excepció no capturada: " . $exception->getMessage() . " a " . $exception->getFile() . ":" . $exception->getLine();
+    
+    if (DEBUG) {
+        echo "<div style='color: red; background: #ffe6e6; padding: 10px; margin: 10px; border: 1px solid red;'>";
+        echo "<strong>Excepció:</strong> $error";
+        echo "<br><strong>Stack trace:</strong><br><pre>" . $exception->getTraceAsString() . "</pre>";
+        echo "</div>";
+    } else {
+        error_log($error);
+        redirigirError();
+    }
+}
+
+// Configurar gestors d'errors
+set_error_handler('gestorErrorsPersonalitzat');
+set_exception_handler('gestorExcepcionsPersonalitzat');
 ?>

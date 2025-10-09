@@ -77,15 +77,29 @@ try {
     }
 } catch (Exception $e) {
     http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage(),
-        'debug' => [
-            'action' => $action,
-            'method' => $method,
-            'codi' => $_GET['codi'] ?? $_POST['codi'] ?? 'no_provided'
-        ]
-    ]);
+    
+    if (DEBUG) {
+        // En mode debug, mostrar informació detallada
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'debug' => [
+                'action' => $action,
+                'method' => $method,
+                'codi' => $_GET['codi'] ?? $_POST['codi'] ?? 'no_provided',
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]
+        ]);
+    } else {
+        // En mode producció, mostrar missatge genèric
+        echo json_encode([
+            'success' => false,
+            'error' => 'S\'ha produït un error. Torna a intentar-ho més tard.',
+            'redirect' => '/error.php'
+        ]);
+    }
 }
 
 function crearPortapapers() {
