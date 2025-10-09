@@ -13,6 +13,8 @@ Una aplicació web PHP per copiar/pegar/compartir text i fitxers entre dispositi
 - ✅ **Neteja automàtica** de portapapers antics (més de 2 hores sense ús)
 - ✅ **Variables d'entorn** per a configuració segura
 - ✅ **Indicador de typing** en temps real entre dispositius
+- ✅ **Mode debug** configurable per desenvolupament i producció
+- ✅ **Gestió d'errors** amb pàgina d'error genèrica
 
 ## Requisits del Sistema
 
@@ -51,6 +53,7 @@ mysql -u root -p portapapers < database/database.sql
    DB_PASS=la_teva_contrasenya
    HEX_LENGTH=6
    REFRESH_INTERVAL=2000
+   DEBUG=true
    ```
 
 2. **Opció B: Configuració directa**
@@ -111,6 +114,7 @@ portapapers/
 ├── public/                     # Fitxers públics
 │   ├── index.php              # Aplicació principal
 │   ├── api.php                # API REST
+│   ├── error.php              # Pàgina d'error genèrica
 │   ├── text.php               # Ruta per text compartit
 │   ├── fitxer.php             # Ruta per fitxers compartits
 │   └── .htaccess              # Configuració de la carpeta public
@@ -195,6 +199,8 @@ Descarrega automàticament el fitxer compartit.
 - Sanitització de dades d'entrada
 - **Variables d'entorn per a credencials sensibles**
 - **El fitxer `.env` no s'ha de pujar al repositori**
+- **Mode debug configurable** per desenvolupament i producció
+- **Gestió d'errors segura** amb pàgina d'error genèrica
 
 ### Recomanacions de Seguretat
 
@@ -243,6 +249,57 @@ Consulta les estadístiques de neteja:
 ```bash
 curl http://localhost/portapapers/api.php?action=estadistiques
 ```
+
+## Mode Debug i Gestió d'Errors
+
+L'aplicació inclou un sistema de debug configurable que permet controlar com es mostren els errors segons l'entorn (desenvolupament o producció).
+
+### Configuració del Mode Debug
+
+Configura la variable `DEBUG` al fitxer `.env`:
+
+```env
+# Mode Debug (true per desenvolupament, false per producció)
+DEBUG=true
+```
+
+### Comportament segons el Mode
+
+#### 🔧 **Mode Debug (`DEBUG=true`)**
+- **Errors visibles**: Tots els errors es mostren per pantalla
+- **Informació detallada**: Stack traces, fitxers, línies d'error
+- **API responses**: Inclou informació de debug completa
+- **Desenvolupament**: Ideal per a desenvolupament i depuració
+
+#### 🛡️ **Mode Producció (`DEBUG=false`)**
+- **Errors ocults**: Els errors no es mostren als usuaris
+- **Pàgina d'error**: Redirecció automàtica a `/error.php`
+- **Logs**: Els errors es registren al log del servidor
+- **Seguretat**: Informació sensible protegida
+
+### Pàgina d'Error Genèrica
+
+Quan `DEBUG=false` i es produeix un error:
+- **Redirecció automàtica** a `/error.php`
+- **Disseny professional** amb missatges en català
+- **Redirecció automàtica** després de 30 segons
+- **Botons d'acció** per tornar a l'inici o enrere
+- **Responsive** per a dispositius mòbils
+
+### Gestió d'Errors
+
+L'aplicació inclou gestors d'errors personalitzats que:
+- **Capturen tots els errors** PHP i excepcions
+- **Redirigeixen automàticament** en mode producció
+- **Registren errors** al log del servidor
+- **Mostren informació detallada** en mode debug
+
+### Recomanacions
+
+- **Desenvolupament**: Utilitza `DEBUG=true` per veure errors detallats
+- **Producció**: Utilitza `DEBUG=false` per ocultar errors als usuaris
+- **Logs**: Revisa els logs del servidor per errors en producció
+- **Seguretat**: Mai exposis informació sensible als usuaris finals
 
 ## Indicador de Typing
 
