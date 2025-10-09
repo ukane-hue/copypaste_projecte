@@ -15,6 +15,7 @@ Una aplicació web PHP per copiar/pegar/compartir text i fitxers entre dispositi
 - ✅ **Indicador de typing** en temps real entre dispositius
 - ✅ **Mode debug** configurable per desenvolupament i producció
 - ✅ **Gestió d'errors** amb pàgina d'error genèrica
+- ✅ **Sistema de logs** per registre d'errors en producció
 
 ## Requisits del Sistema
 
@@ -129,6 +130,15 @@ copypaste/
 │   │   └── styles.css         # Estils CSS moderns
 │   └── js/
 │       └── script.js          # Funcionalitat JavaScript
+├── tests/                      # Scripts de test
+│   ├── README.md              # Documentació de tests
+│   ├── web-test.php           # Test web (navegador)
+│   ├── terminal-test.php      # Test terminal (executor principal)
+│   └── testfiles/             # Subcarpeta amb tests individuals
+│       ├── run-all-tests.php  # Executor original
+│       ├── quick-test.php     # Test ràpid
+│       ├── test-debug.php     # Test de debug
+│       └── files-test.php     # Test de fitxers
 └── README.md                   # Documentació completa
 ```
 
@@ -292,8 +302,16 @@ Quan `DEBUG=false` i es produeix un error:
 L'aplicació inclou gestors d'errors personalitzats que:
 - **Capturen tots els errors** PHP i excepcions
 - **Redirigeixen automàticament** en mode producció
-- **Registren errors** al log del servidor
+- **Registren errors** al fitxer `logs/error.log`
 - **Mostren informació detallada** en mode debug
+
+### Sistema de Logs
+
+Els errors es registren automàticament al fitxer `logs/error.log`:
+- **Format**: `[data hora] PHP Warning: missatge a fitxer:línia`
+- **Ubicació**: `./logs/error.log` (relativa al directori de l'aplicació)
+- **Permisos**: La carpeta `logs/` es crea automàticament si no existeix
+- **Rotació**: Es recomana configurar rotació de logs per a producció
 
 ### Recomanacions
 
@@ -348,6 +366,58 @@ Modifica la constant `REFRESH_INTERVAL` al fitxer `config.php`:
 define('REFRESH_INTERVAL', 2000); // mil·lisegons
 ```
 
+## Tests
+
+L'aplicació inclou un sistema complet de tests per verificar que totes les funcionalitats funcionen correctament.
+
+### 🧪 **Scripts de Test Disponibles**
+
+| Script | Descripció | Ús |
+|--------|------------|-----|
+| `tests/terminal-test.php` | **Executor principal** - Executa tots els tests | `php tests/terminal-test.php` |
+| `tests/web-test.php` | **Test web** - Versió HTML amb CSS per al navegador | `http://localhost/tests/web-test.php` |
+| `tests/testfiles/quick-test.php` | **Test ràpid** - Test bàsic de funcionalitats essencials | `php tests/testfiles/quick-test.php` |
+| `tests/testfiles/test-debug.php` | **Test de debug** - Verifica funcionalitat de debug | `php tests/testfiles/test-debug.php` |
+| `tests/testfiles/files-test.php` | **Test de fitxers** - Verifica funcionalitat de fitxers | `php tests/testfiles/files-test.php` |
+
+### 🚀 **Executar Tests**
+
+```bash
+# Executar tots els tests (terminal)
+php tests/terminal-test.php
+
+# Test web (navegador)
+http://localhost/tests/web-test.php
+
+# Tests individuals
+php tests/testfiles/quick-test.php    # Test ràpid
+php tests/testfiles/test-debug.php    # Test de debug
+php tests/testfiles/files-test.php    # Test de fitxers
+```
+
+### 📊 **Què Verifiquen els Tests**
+
+- ✅ **Connexió a base de dades** - PDO, queries, constants
+- ✅ **Variables d'entorn** - DEBUG, HEX_LENGTH, REFRESH_INTERVAL
+- ✅ **Mode debug** - Error reporting, display errors, logs
+- ✅ **API endpoints** - Crear, obtenir, actualitzar, verificar, typing
+- ✅ **Gestió d'errors** - Codi invàlid, accions inexistents
+- ✅ **Funcions de neteja** - Neteja automàtica, estadístiques
+- ✅ **Operacions de fitxers** - Pujar, descarregar, eliminar
+- ✅ **Validacions de seguretat** - Mida màxima, tipus de fitxers
+- ✅ **Pàgina d'error** - Existència, contingut, funcionalitat
+
+### 🎨 **Característiques dels Tests**
+
+- **Sortida amb colors** per a millor visualització
+- **Mesura de temps** d'execució
+- **Percentatge d'èxit** calculat automàticament
+- **Neteja automàtica** de dades de test
+- **Detecció d'errors** detallada
+- **Recomanacions** per a solucionar problemes
+
+Consulta [`tests/README.md`](tests/README.md) per a documentació detallada dels tests.
+
 ## Solució de Problemes
 
 ### Error de Connexió a la Base de Dades
@@ -363,6 +433,15 @@ define('REFRESH_INTERVAL', 2000); // mil·lisegons
 ### Problemes de Permisos
 - Verifica que el servidor web tingui permisos de lectura
 - Comprova els permisos del directori de l'aplicació
+
+### Executar Tests per Diagnòstic
+```bash
+# Test ràpid per verificar funcionalitats bàsiques
+php tests/testfiles/quick-test.php
+
+# Test complet per diagnòstic exhaustiu
+php tests/terminal-test.php
+```
 
 ## Contribucions
 

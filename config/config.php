@@ -29,12 +29,20 @@ if (DEBUG) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
+    ini_set('log_errors', 1); // També logar errors en desenvolupament
 } else {
     error_reporting(0);
     ini_set('display_errors', 0);
     ini_set('display_startup_errors', 0);
     ini_set('log_errors', 1);
 }
+
+// Configurar fitxer de log d'errors
+$logFile = dirname(__DIR__) . '/logs/error.log';
+if (!file_exists(dirname($logFile))) {
+    mkdir(dirname($logFile), 0755, true);
+}
+ini_set('error_log', $logFile);
 
 class Database {
     private static $instance = null;

@@ -1,10 +1,15 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
+// Només enviar headers si no estem en mode test
+if (!defined('TESTING_MODE')) {
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type');
+}
 
-require_once '../config/config.php';
+// Detectar automàticament la ubicació del fitxer config
+$configPath = file_exists('../config/config.php') ? '../config/config.php' : 'config/config.php';
+require_once $configPath;
 
 $db = Database::getInstance()->getConnection();
 $method = $_SERVER['REQUEST_METHOD'];

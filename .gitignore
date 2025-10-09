@@ -3,6 +3,7 @@
 
 # Logs
 *.log
+logs/
 
 # Fitxers temporals
 *.tmp
@@ -21,3 +22,23 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
+
+# Fitxers de test temporals
+test-log*.php
+run-tests.php
+
+# Fitxers de cache i temporals PHP
+*.cache
+*.pid
+*.sock
+
+# Fitxers d'entorn específics
+.env.local
+.env.production
+.env.staging
+
+# Fitxers de sessió PHP
+sess_*
+
+# Fitxers de uploads temporals
+uploads/temp/
