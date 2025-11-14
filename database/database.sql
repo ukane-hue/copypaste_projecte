@@ -1,4 +1,4 @@
--- =====================================================
++-- =====================================================
 -- PORTAPAPERS - Base de Dades Completa
 -- =====================================================
 -- Aplicació per compartir text i fitxers entre dispositius
@@ -6,11 +6,11 @@
 -- Data: 2024
 
 -- Crear base de dades
-CREATE DATABASE IF NOT EXISTS portapapers 
-CHARACTER SET utf8mb4 
+CREATE DATABASE IF NOT EXISTS copypaste_produccio;
+CHARACTER SET utf8mb4 ;
 COLLATE utf8mb4_unicode_ci;
 
-USE portapapers;
+USE copypaste_produccio;
 
 -- =====================================================
 -- TAULA PRINCIPAL: PORTAPAPERS
